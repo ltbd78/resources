@@ -6,7 +6,7 @@ def get_TA(A, T, depth):
     elif depth == 1:
         return T
     elif depth > 1:
-        T = T @ (A + np.identity(A.shape[0])) # includes itself for stationary moves
+        T = T @ (A + np.identity(A.shape[0])) # identity preserves history
         depth -= 1
         return get_TA(A, T, depth)
     
