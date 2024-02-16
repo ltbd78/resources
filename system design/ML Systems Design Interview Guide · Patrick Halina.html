@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://patrickhalina.com/posts/ml-systems-design-interview-guide/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  
+  <meta name="generator" content="Hugo 0.81.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ML Systems Design Interview Guide · Patrick Halina</title>
+  <meta name="description" content="My guide to ML Systems Design interview questions for ML Engineers, Data Scientists and ML Managers.">
+  <meta name="twitter:description" content="My guide to ML Systems Design interview questions for ML Engineers, Data Scientists and ML Managers.">
+  <meta itemprop="description" content="My guide to ML Systems Design interview questions for ML Engineers, Data Scientists and ML Managers.">
+  <meta property="og:description" content="My guide to ML Systems Design interview questions for ML Engineers, Data Scientists and ML Managers.">
+
+  
+  <meta itemprop="name" content="ML Systems Design Interview Guide · Patrick Halina">
+  <meta name="twitter:title" content="ML Systems Design Interview Guide · Patrick Halina">
+  <meta property="og:title" content="ML Systems Design Interview Guide · Patrick Halina">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="article">
+  <meta name="twitter:site" content="@PatrickHalina">
+  <meta name="twitter:creator" content="@PatrickHalina">
+  <meta itemprop="image" content="http://patrickhalina.com//img/systems_design/ml_systems_design_bridge.png">
+  <meta name="twitter:image" content="http://patrickhalina.com//img/systems_design/ml_systems_design_bridge.png">
+  <meta property="og:image" content="http://patrickhalina.com//img/systems_design/ml_systems_design_bridge.png">
+
+  <meta property="og:url" content="http://patrickhalina.com/posts/ml-systems-design-interview-guide/">
+  <meta property="og:site_name" content="PatrickHalina.com">
+  <meta name="author" property="og:author" content="Patrick Halina">
+  
+  
+  <link type="text/css" rel="stylesheet" href="./ML Systems Design Interview Guide · Patrick Halina_files/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="./ML Systems Design Interview Guide · Patrick Halina_files/poole.css">
+  <link type="text/css" rel="stylesheet" href="./ML Systems Design Interview Guide · Patrick Halina_files/syntax.css">
+  <link type="text/css" rel="stylesheet" href="./ML Systems Design Interview Guide · Patrick Halina_files/hyde.css">
+    <link rel="stylesheet" href="./ML Systems Design Interview Guide · Patrick Halina_files/css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://patrickhalina.com/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://patrickhalina.com/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container">
+    <div class="sidebar-about">
+      <a href="http://patrickhalina.com/"><h1>Patrick Halina</h1></a>
+      <div class="sidebar-bio">
+        <img src="./ML Systems Design Interview Guide · Patrick Halina_files/patrickhalina.jpg">
+        <p class="lead">
+         I'm a Staff ML Engineer at Pinterest focussed on applying AI to shopping. Prior to this, I led the ML Engineering team at Zynga and worked on the ML Marketing platform at Amazon in Seattle. I live in Toronto. 
+        </p>
+      </div>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://patrickhalina.com/">Home</a> </li>
+        
+          <li><a href="http://patrickhalina.com/"> Posts </a></li>
+        
+          <li><a href="http://patrickhalina.com/about"> About </a></li>
+        
+          <li><a href="http://patrickhalina.com/articles-talks"> Publications and Talks </a></li>
+        
+          <li><a href="http://patrickhalina.com/posts/ml-eng-interview-guide"> ML Eng Interview Guide </a></li>
+        
+          <li><a href="https://www.linkedin.com/in/patrick-halina"> LinkedIn: patrick-halina </a></li>
+        
+          <li><a href="https://twitter.com/PatrickHalina"> Twitter: @PatrickHalina </a></li>
+        
+      </ul>
+    </nav>
+
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>ML Systems Design Interview Guide</h1>
+  
+  <time datetime="2021-01-17T05:11:41-0500" class="post-date">Last Updated: Jan 17, 2021</time>
+  
+  <p>
+  <img src="./ML Systems Design Interview Guide · Patrick Halina_files/ml_systems_design_bridge.png" alt="Systems Design Bridge">
+
+</p>
+<p>One of the trickiest interview rounds for ML practitioners is ML systems design. If you’re applying to be a Data Scientist, ML Engineer or ML Manager at a big tech company, you’ll probably face an ML Systems design question. I recently tackled this question at a few big tech companies on my way to becoming a Staff ML Engineer at Pinterest. In this article I’m going to talk about how to approach ML Systems Design interviews, core concepts to know and I’ll provide links to some of the resources I used.</p>
+<p>This is Part 2 of my <a href="http://patrickhalina.com/posts/ml-eng-interview-guide/">ML Engineering Interview Guide</a>, make sure you check out Part 1, my generic <a href="http://patrickhalina.com/posts/systems-design-interview-guide/">Systems Design Interview Guide</a> that’s applicable to both ML and distributed systems design interviews.</p>
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#ml-signals">ML Signals</a></li>
+    <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#ml-systems-questions">ML Systems Questions</a></li>
+    <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#design-process">Design Process</a>
+      <ul>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#product-objectives-and-requirements-clarification">Product Objectives and Requirements Clarification</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#high-level-design">High Level Design</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#data-brainstorming-and-feature-engineering">Data Brainstorming and Feature Engineering</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#infrastructure">Infrastructure</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#model-development">Model Development</a></li>
+      </ul>
+    </li>
+    <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#leveling">Leveling</a></li>
+    <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#ml-concepts">ML Concepts</a>
+      <ul>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#quick-cheat-sheet">Quick Cheat Sheet</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#infrastructure-components">Infrastructure Components</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#embeddings">Embeddings</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#nearest-neighbours">Nearest Neighbours</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#deep-learning">Deep Learning</a></li>
+      </ul>
+    </li>
+    <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#pre-interview-checklist">Pre Interview CheckList</a></li>
+    <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#recommendation-resources">Recommendation Resources</a>
+      <ul>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#concepts-and-background">Concepts and Background</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#reference-end-to-end-architectures">Reference End to End Architectures</a></li>
+        <li><a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#industry-papers">Industry Papers</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+
+<h2 id="ml-signals">ML Signals</h2>
+<p>This interview question is designed to get signals on how good you are at applying ML/AI to real world applications.</p>
+<p>What are companies looking for:</p>
+<ul>
+<li>Theoretical knowledge of ML
+<ul>
+<li>Do you know the right terms to describe ML concepts</li>
+<li>Familiarity with methods</li>
+<li>Familiarity with industry and state of the art solutions</li>
+</ul>
+</li>
+<li>Hands on practical knowledge that comes from real world experience</li>
+<li>An understanding of how an ML application would be implemented in terms of computer infrastructure</li>
+<li>Technical leadership: communication skills, ability to organize concepts</li>
+<li>Product leadership: do you design ML solutions to provide for the needs of users and product designers</li>
+</ul>
+<h2 id="ml-systems-questions">ML Systems Questions</h2>
+<p>I spoke to a lot of companies during my interview process including Pinterest, Spotify and Facebook. To be sure, this isn’t comprehensive so my experiences won’t apply everywhere! I’m not going to break my NDAs and say any of the exact questions I was asked, but I’ll give an overview. Compared to standard software engineering loops, there’s more variation between how each company evaluates candidates on ML skills. This really came through in the ML systems design questions. Some companies blended the questions with regular distributed systems designs while others focussed more on theoretical ML.</p>
+<p>However, based on my experience and research, it’s very common for consumer big tech companies to ask questions about recommender systems in their system design. This makes sense:</p>
+<ul>
+<li>Recommender systems play a key role in modern consumer applications</li>
+<li>It’s a constantly evolving field with many creative approaches</li>
+<li>It can utilize a wide range of ML techniques</li>
+<li>There’s also a non-trivial computer infrastructure component</li>
+</ul>
+<p>Note that this is common for interview loops for ML generalists like myself. If you’re a researcher in NLP, image recognition or some other specialized field, you may get interview design questions focussed on that.  Eg. If you’re coming from the Siri voice recognition team and interviewing at Alexis, you can probably expect some deeper ML questions on voice recognition.</p>
+<p>What are some example questions?</p>
+<p>A well known example question is to design Facebook’s content feed recommendation system. In fact it’s so well known, that it may have been retired from the question base :) We’re not just limited to content feeds though:</p>
+<ul>
+<li>Recommend artists to follow on Spotify</li>
+<li>Recommend restaurants to in Google maps</li>
+<li>Recommend add on items for a cart in Amazon</li>
+</ul>
+<p>You get the idea: given some background and current info about the user, recommend something from a big dataset.</p>
+<h2 id="design-process">Design Process</h2>
+<p>As I mentioned in my first article, I think of systems design questions as improv presentations. The interviewer gives you a task, you clarify it and then present a solution. It’s crucial to go into the interview with a game plan for discussing your design. There’s a lot of ground to cover in creating an ML system and you also need to show some real depth in a few areas. Here’s a flow for an ML question, in reality, it’s easy to blend these topics at any time or take a deep dive. Make sure you look for clues from the interviewer that they want to hear more about a topic, or if you’ve covered enough and you can move on. Don’t forget that you’re not only trying to please the interviewer, but the panel of people who will be reviewing your performance later. Don’t give up any opportunities to show your experience and skills. Remember, unlike other interview rounds, you’re driving this interview, and you want to show both technical knowledge and leadership skills.</p>
+<h3 id="product-objectives-and-requirements-clarification">Product Objectives and Requirements Clarification</h3>
+<p>Once you hear the question, do not dive right into a solution! The first thing you should do is clarify the business/product priorities for the system. For most consumer applications, there’s two high level business objects: engagement and revenue. You want to be a participant in working through how to translate these goals into system objectives. So if the interviewer says they want to increase user engagement, you can start a discussion breaking that down: new user retention, increasing session length, number of sessions, etc. Most products have a North star user action that’s used as a proxy for engagement or satisfaction, like the number of interactions with Instagram posts per day. You don’t need to get into specific KPIs yet (save that discussion for online evaluation.) At this stage, the goal is to spend a little bit of time gathering information and showing off some of your product sense. You might not need all of the information you get, but it will help you think about the problem and give you a bit of time to consider different angles.</p>
+<p>Next, you can discuss product requirements.</p>
+<ul>
+<li>Is this feed being calculated in real time or can you use batch?</li>
+<li>Does this apply to all user segments? How many users are there?</li>
+<li>How quickly do items get stale? (eg. do we need to content that’s only a few seconds old?)</li>
+</ul>
+<p>You also want to bring up technical scaling requirements (don’t make assumptions, it’s key to clarify this out loud):</p>
+<ul>
+<li>How many items are you dealing with?</li>
+<li>How many users are there?</li>
+<li>What are the peak number of requests per second? Or day?</li>
+<li>Hammer out timing SLAs (eg. we’ll incorporate user actions into recommendations within X seconds/minutes/hours)</li>
+</ul>
+<p>These will limit the approaches you can use and affect your infrastructure.</p>
+<p>Often, the interview question may be about the real product the company develops (as opposed to some theoretical situation.) That means you’re expected to make some common sense assumptions. Does Facebook need to support multiple languages? There’s no need to explicitly ask that, but you should call out any assumptions you’re making. You can also clarify any preconceived notions you have about the solution. For example, you might call out that it seems important to be able to show recent posts from friends, but you could get clarity on what ‘recent’ means, posts from the last 5 minutes or the last 24 hours. What’s the oldest content you would recommend?</p>
+<h3 id="high-level-design">High Level Design</h3>
+<p>Once you’ve gathered some initial requirements and have a deeper understanding of the problem, you can discuss a high level approach. It’s best if you can generate a list of high level solutions and call out pros and cons. Iterating through multiple approaches doesn’t lend itself to every problem though, sometimes there’s one well known high level approach. I think it’s best to stick with well known industry patterns, there’s room for creativity in the application details. This is also where it helps to be aware of common ML/AI solutions in industry.</p>
+<p>Look for buy in from the interviewer along the way. Incorporate feedback on areas to focus on and see if they bring up red flags or criteria you’ve missed. This is also a spot to make sure you’ve fully understood the problem setup, before you get too deep in a solution.</p>
+<p>One of the most important design decisions is whether the system is real time, pre calculated batch or some hybrid. Real time systems limit the complexity of the methods available while batch calculations have issues dealing with staleness and new users.</p>
+<p>For problems like real time personalized user feeds, there’s a very common two stage architecture:</p>
+<ol>
+<li>A candidate generation stage to quickly produce a medium sized list of items to consider</li>
+<li>A detailed ranking model to select the top X items to return, using a slower higher performance model</li>
+</ol>
+<p>
+  <img src="./ML Systems Design Interview Guide · Patrick Halina_files/ml_systems_design_recommender_stages.png" alt="ML Recommender System Stages">
+
+</p>
+<h3 id="data-brainstorming-and-feature-engineering">Data Brainstorming and Feature Engineering</h3>
+<p>Two of the crucial signals you need to provide at this interview are the ability to think of useful data to feed into your models and your knowledge about transforming raw signals into usable numeric features for your models. Here’s a hint, this is probably something you can think about ahead of time for your interview. For the company you’re interviewing at, think about the useful data sources and features you could use.  At the same time, many models have thousands of inputs, so you can’t spend the whole interview cycling through this. You can split this up into a couple layers of abstraction.</p>
+<h4 id="data-sources">Data Sources</h4>
+<p>These are the high level sources of signals. Eg. if you’re personalizing the results of a Youtube video search, there’s a few data sources for features:</p>
+<ul>
+<li>The user doing the search</li>
+<li>Each video that can be recommended</li>
+<li>Interactions between the user and each video</li>
+<li>The search query</li>
+</ul>
+<p>It’s worth it to be pretty exhaustive in naming all the high level data sources you can think of, there shouldn’t be that many (less than a dozen.)</p>
+<h4 id="high-level-features">High Level Features</h4>
+<p>Within each data source, you can iterate on the types features available. It’s good to call out some example specific features, but it would take too long to be exhaustive about these. Eg. for a Facebook user you have features like:</p>
+<ul>
+<li>Demographics: Age, gender, nationality, language</li>
+<li>Session: time in session, number of items viewed</li>
+<li>Post History: items liked, items disliked, posts created</li>
+<li>Friends and following: How many friends do they have, posts liked by friends, celebrities/interests followed</li>
+</ul>
+<p>Obviously there’s many more items here. Notice that the concepts are still vague, and would require clarification to actually use in a model. Eg. don’t just leave a feature as ‘history of items liked’, that’s not a numeric value you can train a model with.</p>
+<h4 id="feature-representation">Feature Representation</h4>
+<p>Now you want to discuss actual numeric representations of features. There’s so many potential features here that you should just pick a subset that provides coverage of a wide range of feature engineering techniques. These are some common techniques to create final numeric features:</p>
+<ul>
+<li>Numeric values: demeaning, scaling (eg. dividing by the max or standard deviation), removing outliers (eg. values greater than the 99th percentile). There’s also binning, quantization etc.</li>
+<li>Categorical values: If a categorical value has a dozen or fewer values, you can use one hot encoding. Eg. the OS the user’s client is using. If you need to represent a variable with lots of possible states, it gets unwieldy to use one-hot encoding so you can switch to an embedding.</li>
+<li>Text: There’s a lot of valuable data in text. It’s good to have some basic understanding of NLP concepts so you can discuss how to present text to a model. It’s become common place to use embeddings for this, so understand how systems like BERT and Word2Vec can be used. You don’t need to be an expert, but a bit of knowledge of common techniques will make this so much smoother.</li>
+<li>Complex: How can you represent complex items like a user’s history of viewed posts as a numeric vector? Similar to text embeddings, you can build up a feature by representing each post as its own embedding, then combining the embeddings (through aggregation or concatenation.) For modern AI systems, it should be clear that embeddings play a huge role, so you should understand the math and concepts behind this.</li>
+</ul>
+<p>Make sure you talk about why you’re applying transformations and call out possible options. Discuss assumptions you’re making about the data, eg. it’s skewed or falls within a certain range. Why is it even important to squeeze a numeric value between 0 and 1? Is your choice of model sensitive to how the features are prepared?</p>
+<h4 id="feature-selection">Feature Selection</h4>
+<p>It’s not always a good idea to throw the kitchen sink at your model. Discuss some techniques for feature importance ranking and selection. Bear in mind this is fairly high level and abstract since you don’t have the data in front of you. You can also discuss regularization when you start to talk about models.</p>
+<h4 id="candidate-sources">Candidate Sources</h4>
+<p>If you’re discussing a recommendation system, the first stage is looking at a large set of items to recommend and narrowing this down. If the universe of possible items to recommend is very large, then it’s not feasible to evaluate each one in real time. You need a heuristic to generate an initial list of candidates. What are some common heuristics?</p>
+<ul>
+<li>Items that are ‘close’ to the user in an embedded space</li>
+<li>Items that are similar to items the user has interacted with</li>
+<li>Items that are globally popular across a large population</li>
+<li>Items that friends of friends like</li>
+<li>Items that match some type of search criteria</li>
+</ul>
+<p>There’s a lot of room for creativity here and you might be able to think of some options that are very application specific. Note that you can use more than one source!</p>
+<h3 id="infrastructure">Infrastructure</h3>
+<p>Some companies may not care at all about infrastructure for this interview, while others may actually combine ML with Distributed Systems. Make sure you’re clear on expectations for how much you should discuss the actual infrastructure for the interview. Even if infrastructure isn’t important, you should still keep in mind the limitations that modern computing imposes. No, you won’t be able to run a million high dimensional pictures through a Resnet model in real time. See the <a href="http://patrickhalina.com/posts/ml-systems-design-interview-guide/#infrastructure-components">Infrastructure Components</a> section below for some important ML infrastructure.</p>
+<h3 id="model-development">Model Development</h3>
+<p>Modelling is one of the key skills for any ML practitioner, and you want to show your depth in this area. There’s so many techniques for modelling, it’s good to cover some breadth instead of naming one solution.</p>
+<h4 id="model-types">Model Types</h4>
+<p>Here’s where you discuss the actual modelling techniques you can use for your various components. As with the rest of the design, we’re moving from higher levels of abstraction to more specific. We’ve already described the data inputs to our components, now we want to break down higher level components into lower level ML model types:</p>
+<ul>
+<li>Binary classifiers</li>
+<li>Multi-classifiers</li>
+<li>Regressions</li>
+</ul>
+<p>For our recommender example, the ranking component can be built with an ML model. We can rank the candidates by their predicted outcome for the user. For example, maybe based on our initial discussions, perhaps we’re trying to increase engagement by showing posts that increase user interactions with the posts. There’s lots of ways to do this:</p>
+<ul>
+<li>A binary classifier that predicts whether the user will interact with the given post</li>
+<li>A multi classifier with predictions for commenting, liking or hiding a post</li>
+<li>A regression that predicts the number of interactions a user will make with the post</li>
+</ul>
+<p>The actual model is still a blackbox, we’re not yet discussing how to train the model.</p>
+<h4 id="offline-training-and-evaluation">Offline Training and Evaluation</h4>
+<p>Models are trained and evaluated offline. First, you should discuss the data you’ll use for training. This is a gotcha that might catch people without much real world experience by surprise and often requires a bit of thought. For example, if we’re training a binary classifier to predict whether a user will ‘like’ a post, there’s a lot more posts in the world that the user didn’t like than liked! Should we only train the model using posts that the user observed in their feed which they didn’t like? What if they ended up liking a post later on, do we only label data based on their first impression? How do we deal with data imbalances which are very common in recommender systems? These are issues that all real world recommendation systems deal with, you can read about some of the solutions in industry papers!</p>
+<p>You should also discuss how you’d organize the data for evaluation, eg. k-fold, holdout etc. You should discuss the metrics you’d use to compare models. For classifiers you should discuss what’s more important, precision or recall, especially considering their effect on users. How does it affect the user experience to have a ‘false positive’ versus missing the ‘right’ answer?</p>
+<h4 id="modelling-techniques">Modelling Techniques</h4>
+<p>Now we have the inputs and expected outputs specified for our models. We can discuss actual implementation. I think it’s good to go over a few options and discuss their pros and cons. Eg. Suppose we want a binary classifier to predict whether a user will interact with a given post. Here’s a few quick modeling techniques you can raise:</p>
+<ul>
+<li>Logistic regression: Fast to train, very compact, but only finds linear relationships between features.</li>
+<li>Gradient boosted trees: Better performance than logistic regressions, can find non-linear interactions, typically doesn’t require much tuning.</li>
+<li>Deep Neural Networks: produces state of the art solutions, deals with non-linearities, requires lots of tuning and can require a lot of computing resources to train.</li>
+</ul>
+<p>Don’t forget to bring up advanced issues specific to these models. Eg. For logistic regression you could talk about regularization with lasso or adding interaction features to deal with non-linearity. If your model training uses an optimizer, talk about the loss functions you can use. Talk about hyper-parameters and design choices for each model. This is a chance to show off your depth and go beyond the typical shallow ideas people can grok from a data science tutorial!</p>
+<h4 id="online-evaluation">Online Evaluation</h4>
+<p>We’ve trained our model with the hyperparameters that led to the best evaluation metrics in our holdout data. Should we just launch this to the entire user base? Unless you’re fresh out of school, you should know the answer is NO!</p>
+<p>Make sure you bring up how you would launch the system and actually evaluate whether it’s achieving its business objectives. This is almost always via A/B testing, which has lots of its own nuances. Talk about which metrics you’d measure and statistical tests you’d perform for an A/B test. You can go into some depth talking about ramping patterns and issues that arise with A/B testing.</p>
+<h4 id="model-lifecycle-management">Model Lifecycle Management</h4>
+<p>Once the model is launched, what other ops work will there be? How can we monitor the model to make sure it’s healthy and what operations will we have to do to keep the model performing well. What happens if we want to update our features?</p>
+<h2 id="leveling">Leveling</h2>
+<p>Systems design questions (for both software and ML) go a long way towards determining your level, are you junior, senior or staff. Here’s a few detailed areas that show industry experience:</p>
+<ul>
+<li>Business/Product considerations (eg. cannibalizing revenue or engagement)</li>
+<li>Model lifecycle management (detecting feature drift, performance drop)</li>
+<li>Updating data (eg. embeddings)</li>
+<li>How to split up work between workers or teams</li>
+<li>Measuring effects on business</li>
+<li>Offline and online evaluation</li>
+<li>Data issues and remediation, eg. skewed data, seasonality</li>
+</ul>
+<h2 id="ml-concepts">ML Concepts</h2>
+<p>This article can’t go into detail on every ML concept you should know, but I’ll list a bunch that I think are important. Note that these aren’t just useful for the design interview, but they could come up in other ML interviews as well.</p>
+<h3 id="quick-cheat-sheet">Quick Cheat Sheet</h3>
+<ul>
+<li>Offline objectives
+<ul>
+<li>Distances (cosine, dot, hamming, jaccard, levenshtein)</li>
+<li>Precision, recall, F1, calibration</li>
+<li>RMSE, Ranking, maps, SSE</li>
+<li>Ranking: NDCG, p@k, r@k,</li>
+</ul>
+</li>
+<li>Online evaluation
+<ul>
+<li>A/B testing</li>
+<li>Business KPIs: revenue, retention, engagement</li>
+</ul>
+</li>
+<li>Feature Engineering
+<ul>
+<li>Continuous: demean, normalize</li>
+<li>Discrete: one-hot, embeddings</li>
+<li>Embeddings</li>
+<li>PCA</li>
+</ul>
+</li>
+<li>Training
+<ul>
+<li>Test, train, holdout</li>
+<li>K-folds cross validation</li>
+<li>Training sample selection (eg. negative sampling)</li>
+</ul>
+</li>
+<li>Models
+<ul>
+<li>Linear regressions</li>
+<li>Boosted Trees</li>
+<li>Deep learning</li>
+</ul>
+</li>
+<li>Deep Learning
+<ul>
+<li>Understand theoretical background: optimizers, gradient descent, back prop</li>
+</ul>
+</li>
+<li>Recommendation Systems
+<ul>
+<li>Collaborative Filtering</li>
+<li>Candidate Selection</li>
+<li>Ranking metrics</li>
+</ul>
+</li>
+</ul>
+<h3 id="infrastructure-components">Infrastructure Components</h3>
+<p>You likely won’t have to provide a detailed infrastructure plan like in a distributed systems interview, but you should be able to talk about the infrastructure you could use to implement your solution. These help meet the scale and timing SLAs you would have discussed in the requirements gathering.</p>
+<ul>
+<li>Realtime approximate nearest neighbours systems (eg. <a href="https://github.com/spotify/annoy">Annoy</a>, <a href="https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/">Faiss</a>.)</li>
+<li>Text indexing systems (Lucene, Elasticsearch)</li>
+<li>Database and distributed data systems like Spark</li>
+<li>Serving systems (TFX)</li>
+<li>Model tracking and Management systems (Kubeflow, MLFlow)</li>
+</ul>
+<h3 id="embeddings">Embeddings</h3>
+<p>Embeddings are a key building block in powering modern AI applications. You can’t treat them like a black box. Make sure you understand what they represent and techniques for learning them. Can you embed a user and item in the same space? How can you combine embeddings? Do you need to ‘retrain’ your embeddings if a new item is added to the catalog? Do you need deep learning to learn embeddings?</p>
+<h3 id="nearest-neighbours">Nearest Neighbours</h3>
+<p>For recommendation systems, nearest neighbours can be very useful, especially if you’ve embedded your candidates into a lower dimensional space where distance represents similarity. For candidate generation, you often want to select the k closest items in a catalog. How can you do that without evaluating every single item? You should understand LSH and have general knowledge about the existence of open source solutions like Spotify’s <a href="https://github.com/spotify/annoy">Annoy</a> and Facebook’s <a href="https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/">Faiss</a>. This <a href="https://cloud.google.com/solutions/machine-learning/building-real-time-embeddings-similarity-matching-system">Google Cloud</a> article is helpful.</p>
+<h3 id="deep-learning">Deep Learning</h3>
+<p>This is another key technology that plays a large part in many state of the art solutions. It’s important to have a good understanding of key concepts but there is so much ground to cover here. Here’s what I think the key topics to understand are:</p>
+<ul>
+<li>Theoretical Fundamentals: Nobody will ask you to derive back-propagation using vector calculus. However, you should know the major concepts and how they fit together. Do you know the difference between gradient descent, back propagation and optimizers like Adam? What is convolution? How does a convolution layer ‘pick’ its filters?</li>
+<li>Building blocks: What are the low level layers and design choices you can make? What are some common activation functions and when are they used? What loss function will you use for your problem? It’s good to take a look at the <a href="https://www.tensorflow.org/api_docs/python/tf/keras">Keras API</a> to see if there’s any layers or activation functions that are new to you.</li>
+<li>Real World Techniques: DNNs are finicky, and companies are willing to pay for people who have spent some time in the trenches. What’s your process for hyper parameter selection? What are some key hyper parameters and design choices? What are things to look out for while training a DNN? How can you use transfer learning to cut down on development time? Can you describe regularization techniques like batch norm or l1/l2 penalties?</li>
+<li>Architectures: You might not have hands-on experience with cutting edge architectures, but it’s good to be familiar with what’s out there and have a high level understanding of how it’s used. Examples are wide and deep networks, transformers, inception modules. Focus on how they could fit into a solution, not necessarily all the math and details that power them. What problem did they solve? How do they work at a high level? What application were they used on?</li>
+</ul>
+<p>For the most part, I found that I wasn’t grilled too ‘deeply’ (pun) on deep learning. There are lots of ML positions that don’t touch deep learning. This is a pretty wide list of the topics that may come up during an interview. Nobody knows everything though, it’s perfectly fine to miss a few random topics.</p>
+<h2 id="pre-interview-checklist">Pre Interview CheckList</h2>
+<p>Suppose you just heard from the recruiter that you passed your phone screen. Congratulations! Your reward is a full day of interviews, including systems design. How can you prepare ahead of time?</p>
+<ol>
+<li>Be familiar with core ML concepts and infra listed above (hopefully you’ve already been preparing for this)</li>
+<li>Go over questions for requirements gathering. It’s easy to forget key questions when you’re nervous!</li>
+<li>Prepare the flow for how you’ll discuss your design. I’d do a practice run.</li>
+<li>Brainstorm user features, item features and sources of data signals at the company you’ll be interviewing at. It’s possible you’ll get asked something completely unrelated, but you’ll be thankful if these do come up.</li>
+<li>Make sure you understand the main entities for the company’s product. Eg. If you’re interviewing at Pinterest you’d want to look at what’s in the homefeed, understand what a Pin is, see how users can interact with a Pinboard etc. This makes it easier to understand concepts and requirements. Showing familiarity with the product is also a great way to make the interviewer picture you as ‘part of the team’ instead of an outsider.</li>
+</ol>
+<h2 id="recommendation-resources">Recommendation Resources</h2>
+<p>Here are some resources I found useful for studying up on recommendation systems.</p>
+<h3 id="concepts-and-background">Concepts and Background</h3>
+<ul>
+<li><a href="https://developers.google.com/machine-learning/recommendation">Google Developer Intro to Large Scale Recommendation Systems</a></li>
+<li><a href="http://d2l.ai/chapter_recommender-systems/index.html">Dive Into Deep Learning Recommendation Chapter</a></li>
+<li><a href="https://www.coursera.org/lecture/recommender-metrics/rank-aware-top-n-metrics-Wk98r">Coursera Lecture on Recommendation System Evaluation Metrics</a></li>
+<li><a href="https://ai.googleblog.com/2016/06/wide-deep-learning-better-together-with.html">Wide and Deep Networks</a></li>
+<li><a href="https://developers.google.com/machine-learning/recommendation/collaborative/matrix">Collaborative Filtering</a></li>
+</ul>
+<h3 id="reference-end-to-end-architectures">Reference End to End Architectures</h3>
+<ul>
+<li><a href="https://www.alibabacloud.com/blog/recommender-system-ranking-algorithms-and-training-architectures_596643?spm=a2c65.11461447.0.0.27b9706cB2dcIS">Alibaba Cloud’s Recommendation System Architecture Article</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/ai/real-time-recommendation">Azure’s Reference Architecture for Recommendations</a></li>
+<li><a href="https://cloud.google.com/solutions/machine-learning/building-real-time-embeddings-similarity-matching-system">Google Cloud’s Reference Article for Building a Real Time Rec Sys with Embeddings</a></li>
+</ul>
+<h3 id="industry-papers">Industry Papers</h3>
+<p>These papers show there’s a wide range of ways to create state of the art recommenders, it’s definitely not a cookie cutter problem. Pay attention to the setups, how they do offline and online evaluation.</p>
+<ul>
+<li><a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/45530.pdf">Deep Neural Networks for Youtube Recommendations</a> (2016) - How Youtube uses embeddings for candidate generation</li>
+<li><a href="https://dl.acm.org/doi/10.1145/3298689.3346997">Recommending what video to watch next: a multitask ranking system</a> (2019) - Youtube’s multitask learner for ranking</li>
+<li><a href="https://instagram-engineering.com/powered-by-ai-instagrams-explore-recommender-system-7ca901d2a882">Instagram Explorer recommendation system</a> - they made their own language for non-tech people to quickly develop and test candidate sources</li>
+<li><a href="https://medium.com/pinterest-engineering/an-update-on-pixie-pinterests-recommendation-system-6f273f737e1b">Pinterest Pixie</a> - How Pinterest treats pin recommendations as a graph problem where edges represent pins being on the same board</li>
+<li><a href="https://dl.acm.org/doi/abs/10.1145/3219819.3219885">Real-time Personalization using Embeddings for Search Ranking at Airbnb</a></li>
+<li><a href="https://arxiv.org/pdf/1905.06874.pdf">Behavior Sequence Transformer for E-commerce Recommendation in Alibaba</a></li>
+<li><a href="https://arxiv.org/pdf/1909.03602.pdf">Deep Reinforcement Learning for Online Advertising in Recommender Systems (TikTok)</a> - this uses Reinforcement Learning for recommendations</li>
+</ul>
+
+</div>
+
+
+<p class="legal"><small>© 2021. All rights reserved. Note the contents of this blog are the author's own personal opinions and do not represent the views of the author's current or past employers.</small></p>
+    </main>
+
+    
+      
+<script type="text/javascript" async="" src="./ML Systems Design Interview Guide · Patrick Halina_files/js"></script><script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-35823814-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async="" src="./ML Systems Design Interview Guide · Patrick Halina_files/analytics.js.download"></script>
+
+    
+  
+
+</body></html>

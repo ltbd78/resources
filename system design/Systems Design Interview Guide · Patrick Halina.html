@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)http://patrickhalina.com/posts/systems-design-interview-guide/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  
+  <meta name="generator" content="Hugo 0.81.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Systems Design Interview Guide · Patrick Halina</title>
+  <meta name="description" content="Systems design interviews are hard! Here&#39;s my high level advice for distributed systems and machine learning design questions.">
+  <meta name="twitter:description" content="Systems design interviews are hard! Here&#39;s my high level advice for distributed systems and machine learning design questions.">
+  <meta itemprop="description" content="Systems design interviews are hard! Here&#39;s my high level advice for distributed systems and machine learning design questions.">
+  <meta property="og:description" content="Systems design interviews are hard! Here&#39;s my high level advice for distributed systems and machine learning design questions.">
+
+  
+  <meta itemprop="name" content="Systems Design Interview Guide · Patrick Halina">
+  <meta name="twitter:title" content="Systems Design Interview Guide · Patrick Halina">
+  <meta property="og:title" content="Systems Design Interview Guide · Patrick Halina">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="article">
+  <meta name="twitter:site" content="@PatrickHalina">
+  <meta name="twitter:creator" content="@PatrickHalina">
+  <meta itemprop="image" content="http://patrickhalina.com/img/systems_design/systems_design_bridge.png">
+  <meta name="twitter:image" content="http://patrickhalina.com/img/systems_design/systems_design_bridge.png">
+  <meta property="og:image" content="http://patrickhalina.com/img/systems_design/systems_design_bridge.png">
+
+  <meta property="og:url" content="http://patrickhalina.com/posts/systems-design-interview-guide/">
+  <meta property="og:site_name" content="PatrickHalina.com">
+  <meta name="author" property="og:author" content="Patrick Halina">
+  
+  
+  <link type="text/css" rel="stylesheet" href="./Systems Design Interview Guide · Patrick Halina_files/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="./Systems Design Interview Guide · Patrick Halina_files/poole.css">
+  <link type="text/css" rel="stylesheet" href="./Systems Design Interview Guide · Patrick Halina_files/syntax.css">
+  <link type="text/css" rel="stylesheet" href="./Systems Design Interview Guide · Patrick Halina_files/hyde.css">
+    <link rel="stylesheet" href="./Systems Design Interview Guide · Patrick Halina_files/css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://patrickhalina.com/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://patrickhalina.com/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container">
+    <div class="sidebar-about">
+      <a href="http://patrickhalina.com/"><h1>Patrick Halina</h1></a>
+      <div class="sidebar-bio">
+        <img src="./Systems Design Interview Guide · Patrick Halina_files/patrickhalina.jpg">
+        <p class="lead">
+         I'm a Staff ML Engineer at Pinterest focussed on applying AI to shopping. Prior to this, I led the ML Engineering team at Zynga and worked on the ML Marketing platform at Amazon in Seattle. I live in Toronto. 
+        </p>
+      </div>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://patrickhalina.com/">Home</a> </li>
+        
+          <li><a href="http://patrickhalina.com/"> Posts </a></li>
+        
+          <li><a href="http://patrickhalina.com/about"> About </a></li>
+        
+          <li><a href="http://patrickhalina.com/articles-talks"> Publications and Talks </a></li>
+        
+          <li><a href="http://patrickhalina.com/posts/ml-eng-interview-guide"> ML Eng Interview Guide </a></li>
+        
+          <li><a href="https://www.linkedin.com/in/patrick-halina"> LinkedIn: patrick-halina </a></li>
+        
+          <li><a href="https://twitter.com/PatrickHalina"> Twitter: @PatrickHalina </a></li>
+        
+      </ul>
+    </nav>
+
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Systems Design Interview Guide</h1>
+  
+  <time datetime="2021-01-01T05:56:25-0500" class="post-date">Last Updated: Jan 1, 2021</time>
+  
+  <p>
+  <img src="./Systems Design Interview Guide · Patrick Halina_files/systems_design_bridge.png" alt="Systems Design Bridge">
+
+</p>
+<p>This article gives tips and advice for systems design interviews, which are the hardest questions to prepare for in FAANG style software engineering interviews. I recently joined Pinterest as a Staff ML Engineer, which meant interviewing with a bunch of big tech companies for the first time in 6 years. I did well enough to get some offers so I’d like to share my approach (without breaching any NDAs and getting sued.)</p>
+<p>As an ML Engineer, I had to go through 2 types of design interviews: standard distributed systems and ML systems. In this article, I’ll discuss high level advice that can be applied to both types of interviews. I’m going to write specific articles for distributed system and ML system design interview questions.</p>
+<p>Here’s a summary of my advice:</p>
+<ol>
+<li>Understand the signals that companies are looking for</li>
+<li>Think of systems design questions as an improv presentation</li>
+<li>You can prepare by thinking of your process for walking through a design and researching the building blocks you can use</li>
+</ol>
+<p><em>Special thanks to my friends Masud Khan (Facebook), Michael Ritche (Google), Curren Pangler (Zynga) and Mehdi Ben Ayed (Spotify) for reviewing this giving their input</em></p>
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#what-are-systems-design-interview-questions-and-why-are-they-so-important">What Are Systems Design Interview Questions and Why Are They so Important?</a></li>
+    <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#what-signals-companies-are-looking-for">What Signals Companies Are Looking For?</a>
+      <ul>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#design">Design</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#process">Process</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#background-theory">Background Theory</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#real-world-gotchas">Real World Gotchas</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#technical-leadership">Technical Leadership</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#productuser-empathy">Product/User Empathy</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#high-level-approach">High Level Approach</a></li>
+      </ul>
+    </li>
+    <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#design-approach">Design Approach</a>
+      <ul>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#clarification">Clarification</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#high-level-solution">High Level Solution</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#architectural-components">Architectural Components</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#concrete-component-implementations">Concrete Component Implementations</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#finishing-touches">Finishing Touches</a></li>
+      </ul>
+    </li>
+    <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#tips">Tips</a>
+      <ul>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#start-simple-and-add-complexity">Start Simple and Add Complexity</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#describe-your-thought-process">Describe Your Thought Process</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#dont-let-the-interviewer-screw-you-up">Don’t Let the Interviewer Screw You Up</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#listen-to-the-interviewer">Listen to the Interviewer</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#be-confident-but-dont-bullshit">Be Confident, But Don’t Bullshit</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#diagram-by-hand">Diagram By Hand</a></li>
+        <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#ive-never-done-this-before">I’ve Never Done This Before!</a></li>
+      </ul>
+    </li>
+    <li><a href="http://patrickhalina.com/posts/systems-design-interview-guide/#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+</div>
+
+<h2 id="what-are-systems-design-interview-questions-and-why-are-they-so-important">What Are Systems Design Interview Questions and Why Are They so Important?</h2>
+<p>If you’re interviewing to be a senior engineer, staff engineer or manager, you’re probably going to face a system design interview or 2. For software engineers going through a distributed system design, these are some example systems you may be asked to design in interviews:</p>
+<ul>
+<li>A TinyURL service</li>
+<li>A web crawler</li>
+<li>A key/value datastore</li>
+</ul>
+<p>ML Systems Design questions are typically about recommendation systems. For example, Facebook has been known to ask about creating a Facebook content feed.</p>
+<p>These are the hardest questions to prepare for in the interview loop for a few reasons:</p>
+<ul>
+<li>There aren’t many good resources to study from, some of the example solutions I saw online were pretty bad</li>
+<li>Every company does things a bit differently</li>
+<li>Lots of variance between interviewers</li>
+<li>It draws on a huge range of background, nobody has hands on experience with every aspect</li>
+<li>There’s very subtle differences in senior and staff levels</li>
+<li>It’s unstructured, and <strong>it’s your responsibility to deliver the signals!</strong></li>
+</ul>
+<p>Systems design interviews signal your experience working on real world, high scale problems. It’s critically important to do well in these interviews for more senior roles (where you’re being hired for your experience.) As you become more senior, there’s less and less distinction in lower level skills like coding. That makes the behaviour and systems design questions key drivers for determining your level.</p>
+<h2 id="what-signals-companies-are-looking-for">What Signals Companies Are Looking For?</h2>
+<p>Ultimately, Systems Design questions show you have a strong theoretical background, and you know how to apply it to solve real world problems. They also show your creative thinking and problem solving skills. There’s a few layers to this.</p>
+<h3 id="design">Design</h3>
+<p>What does it mean to show design skills? These questions are almost always based on real world problems that have evolved many different state of the art solutions over the years. Which means you’re expected to invent the new state of the art standard during your 45 minute interview. Design in this sense means decomposing a system into different components. You then utilize standard building blocks for each component. This interview shows your ability to split a big problem into smaller conceptual pieces. It also shows what building blocks you have in your design toolbox, how well you know them, and how wise are in putting them together.</p>
+<p>There isn’t one right answer for these problems, and there’s often lots of options for each component. It’s a good idea to name the possible options for each component and discuss their tradeoffs.</p>
+<h3 id="process">Process</h3>
+<p>How do you approach complex problem solving in general? These types of systems have a lot of breadth and depth, so it’s up to you to use your time to cover the important aspects. If the interviewer asks “Could you design a system to extract all the english words in dictionary.com”, don’t just dive into “Well I’d start with a MySQL database and then spin up five ec2 instances with Python API…”. You’re jumping into detail too early. I discuss my approach later on in the article.</p>
+<h3 id="background-theory">Background Theory</h3>
+<p>ML and Distributed systems have a lot of theory that back standard methods and solutions. Do you know how to dive a bit deeper into these solutions to explain what theoretical problem they solve? Or how theoretical concepts like CAP limits capabilities. One of the tricky things with working in ML is that there’s a lot more theory to cover for well known practices.</p>
+<h3 id="real-world-gotchas">Real World Gotchas</h3>
+<p>This is a great chance to show your battle scars and hard won real world experience. These are the types of things that aren’t always called out in articles or documentation, but they affect production high scale systems. Some examples are:</p>
+<ul>
+<li>Regionalization of infrastructure</li>
+<li>Life cycle ops issues like updating schemas, features or apis</li>
+<li>Data compliance</li>
+<li>Security</li>
+</ul>
+<p>Showing these signals are key for being ranked at more senior levels.</p>
+<h3 id="technical-leadership">Technical Leadership</h3>
+<p>Can you organize and communicate your ideas well? Can you overcome challenges? Are you trustworthy and wise in your decision making? Can you split your design into subsystems that different teams can work on?</p>
+<h3 id="productuser-empathy">Product/User Empathy</h3>
+<p>Do you understand how your technical implementations affect the product and user experience? Can you design systems in a way to allow product leaders in the company to deliver better user experiences? Can you anticipate the stakeholder tensions for the system?</p>
+<h3 id="high-level-approach">High Level Approach</h3>
+<p>Unlike every other interview, you should be driving the system design interview. Recruiters mentioned numbers like you should be doing 80% of the talking. This can feel unnatural, but if you do find yourself in a situation where it’s a comfortable loop of the interviewer asking you a question and you giving a quick response, things might not be going so well. This has led me to think of Systems Design interviews as improv presentations. The interviewer gives you a topic and some constraints, then you give an impromptu presentation on your solution (as you’re coming up with the solution.)</p>
+<p>There’s 3 stages to the interview.</p>
+<ul>
+<li>Problem: The interviewer gives you a purposely vague task.</li>
+<li>Clarification: You show leadership and experience by asking meaningful questions to clarify requirements and performance priorities.</li>
+<li>Presentation: You give an impromptu presentation on solutions (probably as you’re thinking of the solution.)</li>
+</ul>
+<p>If you’ve ever given a presentation, you know that they go a lot smoother when you’ve done some preparation. But how can you prepare for a presentation when you don’t know the solution or interview question? It’s not that bad, you might not know the details but you can prepare the general flow of the presentation ahead of time. The topics you choose to cover also speak a lot about your level.</p>
+<p>One nice thing about systems design interviews is that there’s no one right solution. In fact, it’s important to be able to generate multiple solutions and discuss their tradeoffs. An interviewer may even take your perfectly good solution and throw a wrench in it, forcing you to adapt and think of new solutions. There’s also going to be areas of the solution you won’t know much about. Don’t worry about calling that out, it’s better than bullshitting and being confidently wrong. Don’t let it throw you off either. Nobody is expected to be an expert on everything, but everybody needs to be trusted to know their own knowledge limits. So be confident about being unsure!</p>
+<h2 id="design-approach">Design Approach</h2>
+<p>Imagine you’re in a small interview room in Facebook’s Menlo Park offices. You’ve had a couple of minutes of small talk with the smiling interviewer but now it’s time to get down to business. They ask you to design a service like TinyURL. How are we going to do this?</p>
+<h3 id="clarification">Clarification</h3>
+<p>Absolutely, do not, under any circumstances, no matter how panicked you are, start discussing a solution. Instead, you need to ask clarifying questions about this vague request to understand the priorities, scale and restrictions of the system you’re designing. For both ML and distributed systems, you want to ask about scale: how many users, how much data, latency expectations etc. Sometimes you ask, sometimes you lead a discussion. Eg. for latency, an experienced engineer will know that 2 seconds is too long for an API, so offer practical ranges where you can. For distributed system questions, you’ll want to take your requirements and translate these into rough resource estimates (eg. network capacity, number of machines, data storage.)</p>
+<p>Once you understand the goal of the system and clarify requirements, it’s time to actually “present” a solution. I’ve provided some example conceptual diagrams that apply to distributed systems, but the general concepts work for ML designs too. Here’s how I approached this.</p>
+<h3 id="high-level-solution">High Level Solution</h3>
+<p>Start abstract and simple to lay out an end to end solution. This is useful because it ensures you have a full understanding of the problem the interviewer is asking you to solve. Give the interviewer a chance to understand your approach and ask questions, you want some feedback that your approach will work. You’ll also want to touch on how design decisions affect the business or product to make sure you’ve clarified priorities of the system. Another advantage of having a simple end to end solution is that it helps you identify what the real technical challenges are. There may be some hidden depth in how components interact that wasn’t obvious from the problem definition.</p>
+<p>At this stage, the components of the initial high level system should be technology agnostic and abstract away scaling and concrete methods/technologies. For distributed systems, you’d be dealing with high level concepts like clients, servers and state storage. You’ll also call out how the system components interact with each other. This can include API definitions or data schemas. For ML Systems, you’ll be talking about the high level sources of data you’ll be working with, and how models interact with the product. You’ll call out the types of models (eg. binary classifier) and how the system will be evaluated (eg. offline evaluation of increasing retention via A/B test.)</p>
+<p>
+  </p><figure>
+    <img src="./Systems Design Interview Guide · Patrick Halina_files/systems_design_1.png" alt="High level design components">
+    <figcaption>First pass of design showing high level components and how they interact.</figcaption>
+  </figure>
+
+<p></p>
+<h3 id="architectural-components">Architectural Components</h3>
+<p>Next, you can start filling in some details. One approach is to start with a simple approach and then evolve it to increase performance. Your components become more specific, using well known architectural building blocks. For a distributed system design, these types of building blocks are things like databases, queues, SQL/NOSQL databases. In ML designs, you can get more concrete about how models are delivered to the product, eg. batch or real time, what type of infrastructure is required? Make sure you describe the reasoning behind your design choices (eg. how does using a queue fit into the system requirements.) You can also include some data models, if necessary.</p>
+<p>
+  </p><figure>
+    <img src="./Systems Design Interview Guide · Patrick Halina_files/systems_design_2.png" alt="Second level design components">
+    <figcaption>Second pass of design with more details filled in like data models and component types.</figcaption>
+  </figure>
+
+<p></p>
+<h3 id="concrete-component-implementations">Concrete Component Implementations</h3>
+<p>Next you can start diving into choices for your components. You don’t just want to arbitrarily choose your solutions. You want to go through a list of options and discuss their trade offs. You can describe how you’d start using one choice and then consider upgrading to another under certain conditions. As you’re iterating through ideas, it’s great to bring up state of the art solutions you’ve researched that can be applied. Often you’ll choose (or the interviewer will ask) to dive into some details about some specific components. How does a distributed queue work? How will your system handle concurrency?</p>
+<p>
+  </p><figure>
+    <img src="./Systems Design Interview Guide · Patrick Halina_files/systems_design_3.png" alt="Implementation level design components">
+    <figcaption>Lower level design with implementation details filled in.</figcaption>
+  </figure>
+
+<p></p>
+<h3 id="finishing-touches">Finishing Touches</h3>
+<p>By this point, you probably have a nice solution and you’ve shown off your design chops. Hopefully you’ve saved a bit of time to really put yourself over the top. This is especially important if you’re going for more senior tech leadership positions like staff eng. Here’s where you’ll want to cover some advanced topics like how the system development could be split between different teams, long term ways the system could evolve to meet future business needs, common components that could be reused by different products, real world issues like regionalization or data schema migrations.</p>
+<h2 id="tips">Tips</h2>
+<h3 id="start-simple-and-add-complexity">Start Simple and Add Complexity</h3>
+<p>Throughout the interview, you need to show breadth and depth. There isn’t enough time to get into depth on everything, so you want to be strategic about this to cover areas you’re good at. Start with breadth. Get and end to end working solution, ideally with high level components. You can then start diving into details for some of these components. The interviewer may actually guide you to areas that they care about (or are more fruitful for design discussions.)</p>
+<h3 id="describe-your-thought-process">Describe Your Thought Process</h3>
+<p>There’s no one right answer, but there needs to be a method to the madness. It’s a bad look to make arbitrary decisions without explaining them. “For the binary classifier we’ll use a Tensorflow deep neural network” Why? Why did you make a specific choice to use Tensorflow over PyTorch? Why are we using a DNN instead of other modelling techniques?</p>
+<h3 id="dont-let-the-interviewer-screw-you-up">Don’t Let the Interviewer Screw You Up</h3>
+<p>Remember, you’re driving the interview. So don’t expect the interviewer to necessarily ask you about all the areas you’re expected to discuss to pass the interview. It’s tricky though, because interviewers will guide you to areas to focus on, and some interviewers do ask lots of detailed questions. If you finish the interview and think “phew, he didn’t ask me about concurrency!”, you probably did poorly.</p>
+<p>This isn’t just the hardest interview to prepare for, they’re also hard to conduct. Some interviewers will get off track honing in on tiny details or seem satisfied with very shallow answers. Don’t forget, you’re not just convincing the interviewer, you’re convincing the interview panel. So don’t be afraid to shift the direction of the conversation to cover areas where you can add more signal. Offer to cover things, “I could make a diagram of this”. Obviously, you don’t want to be too pushy, if they’re asking you questions or directing you to a specific area, make sure you cover it. Avoiding answering a direct question is nearly always fatal in interviews.</p>
+<h3 id="listen-to-the-interviewer">Listen to the Interviewer</h3>
+<p>Even though you’re meant to drive the interview, you still need to listen. These problems have lots of areas to go into depth, and the interviewer may be interested in one particular aspect. Make sure you listen to cues and go with the flow. As I mentioned before, ignoring or deflecting a direct question or request is a quick way to fail.</p>
+<h3 id="be-confident-but-dont-bullshit">Be Confident, But Don’t Bullshit</h3>
+<p>You’re not expected to be an expert in everything. There will be some aspects of the system you won’t know much about in depth. It’s much better to call these out than bullshit something that’s incorrect. Do still attempt partial answers, that’s usually more than enough.</p>
+<p>Q: “How do you ensure only authorized users can access their data in your API”?</p>
+<p>A: “This isn’t my area of expertise, but I know OAuth is commonly used for authentication.”</p>
+<h3 id="diagram-by-hand">Diagram By Hand</h3>
+<p>As I write this at the end of 2020, it’s about day 300 of every company working from home during Corona. Which means all these interviews are being conducted through video conferencing. This may actually continue into the future, since it saves a lot of time, money and effort to interview remotely than fly people out to hq for a few days. But it makes communicating designs harder. You’ll be given the option of creating digital diagrams through Google Docs or Coderpad, but I’d highly recommend writing on paper and showing them to the camera. I’ve tried both and it’s so much easier and faster writing diagrams by hand. It’s even better if you have a small white board in your office.</p>
+<h3 id="ive-never-done-this-before">I’ve Never Done This Before!</h3>
+<p>Odds are, you’ll be asked to design something you’ve never personally done before. This is where you need to recognize how your past experience can be applied to this new problem. You should also research and be aware of other published production solutions and be able to incorporate those ideas. As you become more experienced, you can fill in the blanks from, “I’ve read about this service” to “I’ve tried A and B, A had good performance for X but I’d start with B because Y”.</p>
+<p>However, maybe you’re working somewhere where you haven’t dealt with large scale data or they aren’t using any type of sophisticated ML techniques. This is a great motivation to get a new job! Sometimes companies pay for potential and sometimes they pay for experience. If you don’t have the experience, then you may have to settle for a lower level position where you can gain experience. If you stay at a company for too long where you’re not being exposed to new challenges and techniques, it starts reflecting poorly on your own decision making and values.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Hopefully this article will give you an understanding of how to approach systems design questions. This is a hard question to prepare for, with few resources online, but there’s a few things you can do:
+Think about the process you’ll go through to discuss your design
+Study and understand the building blocks you’ll use in your design
+Read up on state of the art designs</p>
+<p>In my next articles I’ll write some more detailed steps for the ML Systems interview and Distributed Systems interview.</p>
+
+</div>
+
+
+<p class="legal"><small>© 2021. All rights reserved. Note the contents of this blog are the author's own personal opinions and do not represent the views of the author's current or past employers.</small></p>
+    </main>
+
+    
+      
+<script type="text/javascript" async="" src="./Systems Design Interview Guide · Patrick Halina_files/js"></script><script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-35823814-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async="" src="./Systems Design Interview Guide · Patrick Halina_files/analytics.js.download"></script>
+
+    
+  
+
+</body></html>
